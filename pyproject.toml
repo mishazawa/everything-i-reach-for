@@ -12,5 +12,7 @@ dependencies = [
     "mujoco>=3.11.0",
     "numpy>=2.5.2",
     "playground>=0.2.0",
+    "pygame>=2.6.1",
     "stable-baselines3>=2.9.0",
+    "tqdm>=4.70.0",
 ]
