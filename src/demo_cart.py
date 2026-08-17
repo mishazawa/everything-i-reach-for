@@ -1,5 +1,5 @@
 import gymnasium as gym
-import torch
+from safetensors.torch import load_file
 
 from src.agents import DQNCartAgent
 
@@ -16,10 +16,9 @@ def cart():
         decay_fn=lambda: 0,
     )
 
-    checkpoint = torch.load("./data/checkpoint_6000.pt")
-
-    agent.q_net.load_state_dict(checkpoint["q_net"])
-    agent.target_net.load_state_dict(checkpoint["q_net"])
+    f = load_file("./data/checkpoint_6000.safetensors")
+    agent.q_net.load_state_dict(f)
+    agent.target_net.load_state_dict(f)
 
     try:
         while True:
