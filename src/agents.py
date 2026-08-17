@@ -15,6 +15,7 @@ MAX_LEN = 10_000
 BATCH_SIZE = 64
 MIN_BUFFER = 1000
 SYNC_FREQ = 500
+N_PARAMS = 20
 
 
 class DQNCartAgent:
@@ -40,15 +41,15 @@ class DQNCartAgent:
         self.training_queue = deque(maxlen=MAX_LEN)
 
         self.q_net = nn.Sequential(
-            nn.Linear(4, 20),
+            nn.Linear(env.observation_space.shape[0], N_PARAMS),
             nn.LeakyReLU(),
-            nn.Linear(20, 2),
+            nn.Linear(N_PARAMS, env.action_space.n),
         )
 
         self.target_net = nn.Sequential(
-            nn.Linear(4, 20),
+            nn.Linear(env.observation_space.shape[0], N_PARAMS),
             nn.LeakyReLU(),
-            nn.Linear(20, 2),
+            nn.Linear(N_PARAMS, env.action_space.n),
         )
 
         self.sync_networks(0)
