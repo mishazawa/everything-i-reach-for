@@ -1,32 +1,25 @@
-import pickle
-from collections import defaultdict
-
 import gymnasium as gym
-import numpy as np
+import torch
 
-from src.CartAgent import CartAgent as QCartAgent
-from src.utils import create_bins_for_use
+from src.agents import DQNCartAgent
 
 
 def cart():
-    with open("./data/q_table_0.1_200000_33_2_1_0.99_exp.pkl", "rb") as f:
-        loaded = pickle.load(f)
-
-    Q = defaultdict(lambda: np.zeros(2), loaded)  # 2 = your action count
-
     env = gym.make("CartPole-v1", render_mode="human")
 
-    agent = QCartAgent(
+    agent = DQNCartAgent(
         env=env,
         learning_rate=0,
         initial_epsilon=0,
         epsilon_decay=0,
         final_epsilon=0,
-        bins=create_bins_for_use(env, 33, (2, 1)),
         decay_fn=lambda: 0,
     )
 
-    agent.q_values = Q
+    checkpoint = torch.load("./data/checkpoint_6000.pt")
+
+    agent.q_net.load_state_dict(checkpoint["q_net"])
+    agent.target_net.load_state_dict(checkpoint["q_net"])
 
     try:
         while True:
