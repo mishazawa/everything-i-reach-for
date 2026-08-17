@@ -14,5 +14,6 @@ dependencies = [
     "playground>=0.2.0",
     "pygame>=2.6.1",
     "stable-baselines3>=2.9.0",
+    "torch>=2.13.0",
     "tqdm>=4.70.0",
 ]
