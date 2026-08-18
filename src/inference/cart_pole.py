@@ -31,15 +31,13 @@ if __name__ == "__main__":
 
     state_dict = load_file("./data/checkpoint_6000.safetensors", device=device)
 
-    state_dict = {
-        f"net.{k}": v for k, v in state_dict.items()
-    }  # crutch because of DQNAgent naming
+    state_dict = {f"net.{k}": v for k, v in state_dict.items()}  # crutch because of DQNAgent naming
 
     agent.load_state_dict(state_dict)
     agent.eval()
 
     done = False
-    total_reward = 0
+    total_reward = 0.0
     while not done:
         action = get_action(agent, state, device)
         state, reward, terminated, truncated, _ = env.step(action)
