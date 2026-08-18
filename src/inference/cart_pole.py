@@ -1,22 +1,8 @@
 import gymnasium as gym
 import torch
 from safetensors.torch import load_file
-from torch import nn
 
-HIDDEN = 128
-
-
-class DQN(nn.Module):
-    def __init__(self, n_observations, n_actions, hidden=HIDDEN):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(n_observations, hidden),
-            nn.LeakyReLU(),
-            nn.Linear(hidden, n_actions),
-        )
-
-    def forward(self, x):
-        return self.net(x)
+from src.networks.dqn import DQN
 
 
 def load_agent(weights_path, n_observations, n_actions, device="cpu"):
