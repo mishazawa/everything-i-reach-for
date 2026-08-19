@@ -1,3 +1,6 @@
 [submodule ".deps/menagerie"]
 	path = .deps/menagerie
 	url = https://github.com/google-deepmind/mujoco_menagerie.git
+[submodule "rl_studying_zoo_checkpoints"]
+	path = rl_studying_zoo_checkpoints
+	url = https://huggingface.co/Mishazawa/rl_studying_zoo_checkpoints
