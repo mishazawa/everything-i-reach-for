@@ -37,11 +37,10 @@ class A2CCartAgent:
         if len(batch) < MIN_BUFFER:
             return False
 
-        states, actions, rewards, next_states, dones = zip(*batch, strict=False)
+        states, _, rewards, next_states, dones = zip(*batch, strict=False)
 
         states = torch.tensor(np.array(states), dtype=torch.float32)
         next_states = torch.tensor(np.array(next_states), dtype=torch.float32)
-        actions = torch.tensor(actions, dtype=torch.int64).unsqueeze(1)
         rewards = torch.tensor(rewards, dtype=torch.float32)
         dones = torch.tensor(dones, dtype=torch.float32)
 
