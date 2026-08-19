@@ -3,6 +3,7 @@ import torch
 from safetensors.torch import load_file
 
 from src.networks.dqn import DQN
+from src.networks.mlp import MLP
 
 
 def load_agent(weights_path, n_observations, n_actions, device="cpu"):
@@ -13,10 +14,28 @@ def load_agent(weights_path, n_observations, n_actions, device="cpu"):
     return agent
 
 
+def load_agent_a2c(weights_path, n_observations, n_actions, device="cpu"):
+    agent = MLP(n_observations, n_actions).to(device)
+    state_dict = load_file(weights_path, device=device)
+    agent.load_state_dict(state_dict)
+    agent.eval()
+    return agent
+
+
+@torch.no_grad
 def get_action(agent, state, device="cpu"):
     state_t = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
-    with torch.no_grad():
-        return agent(state_t).max(1).indices.item()
+    return agent(state_t).max(1).indices.item()
+
+
+@torch.no_grad
+def get_action_a2c(agent, state, device="cpu"):
+
+    state = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
+    probs = agent(state)
+    action = torch.argmax(probs)
+
+    return int(action.item())
 
 
 if __name__ == "__main__":

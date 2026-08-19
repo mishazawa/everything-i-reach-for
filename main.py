@@ -1,6 +1,6 @@
 import gymnasium as gym
 
-from src.inference.cart_pole import get_action, load_agent
+from src.inference.cart_pole import get_action_a2c, load_agent_a2c
 
 
 def main():
@@ -12,8 +12,8 @@ def main():
     n_observations = len(state)
     n_actions = env.action_space.n
 
-    agent = load_agent(
-        "./data/e600_128.safetensors",
+    agent = load_agent_a2c(
+        "./data/a2c_e6000.safetensors",
         n_observations=n_observations,
         n_actions=n_actions,
         device=device,
@@ -22,7 +22,7 @@ def main():
     done = False
     total_reward = 0
     while not done:
-        action = get_action(agent, state, device)
+        action = get_action_a2c(agent, state, device)
         state, reward, terminated, truncated, _ = env.step(action)
         done = terminated or truncated
         total_reward += reward
