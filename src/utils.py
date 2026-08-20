@@ -1,4 +1,5 @@
 import numpy as np
+from safetensors.torch import save_file
 
 EPS = 1e-6
 
@@ -24,7 +25,7 @@ def scale_bin(b, s):
 
 
 def discrete_value(input: float, bins: list[float], bin_count) -> float:
-    return min(np.digitize(input, bins), bin_count - 1)
+    return np.min(np.digitize(input, bins), bin_count - 1)
 
 
 def create_bins_for_use(env, bc, scale):
@@ -45,10 +46,7 @@ def create_bins_for_use(env, bc, scale):
 
 def get_moving_avgs(arr, window, convolution_mode):
     """Compute moving average to smooth noisy data."""
-    return (
-        np.convolve(np.array(arr).flatten(), np.ones(window), mode=convolution_mode)
-        / window
-    )
+    return np.convolve(np.array(arr).flatten(), np.ones(window), mode=convolution_mode) / window
 
 
 def exponential_decay(start_epsilon, final_epsilon, epsilon_decay):
@@ -71,3 +69,7 @@ def linear_decay(start_epsilon, final_epsilon, epsilon_decay):
         return epsilon
 
     return calc
+
+
+def save_checkpoint(network, name):
+    save_file(network.state_dict(), f"./data/{name}.safetensors")

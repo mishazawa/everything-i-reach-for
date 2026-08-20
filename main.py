@@ -13,7 +13,7 @@ def main():
     n_actions = env.action_space.n
 
     agent = load_agent_a2c(
-        "./data/a2c_e6000.safetensors",
+        "./data/ppo_lr0.00025_ne6000_k4_r4_20260820_204416.safetensors",
         n_observations=n_observations,
         n_actions=n_actions,
         device=device,
