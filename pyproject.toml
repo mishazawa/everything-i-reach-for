@@ -11,6 +11,7 @@ dependencies = [
     "mediapy>=1.2.7",
     "mujoco>=3.11.0",
     "numpy>=2.5.2",
+    "onnxscript>=0.7.1",
     "playground>=0.2.0",
     "pygame>=2.6.1",
     "safetensors>=0.8.0",

@@ -15,6 +15,7 @@ wheels/
 *.pkl
 *.pt
 *.safetensors
-
+*.onnx
+*.onnx.data
 .serena/
 logs/
