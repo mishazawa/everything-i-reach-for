@@ -6,9 +6,9 @@ class MLP(nn.Module):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(n_observations, hidden),
-            nn.LeakyReLU(),
+            nn.Tanh(),
             nn.Linear(hidden, hidden),
-            nn.LeakyReLU(),
+            nn.Tanh(),
             nn.Linear(hidden, n_actions),
             nn.Softmax(dim=-1),
         )
