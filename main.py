@@ -3,12 +3,12 @@ import onnxruntime as ort
 
 from src.inference.cart_pole import run_inference
 
-CHECKPOINT = "acrobot_ppo_lr0.00025_ne6000_k4_r1_20260821_134336"
+CHECKPOINT = "latest"
 
 
 def main():
     print("Hello from everything-i-reach-for!")
-    env = gym.make("Acrobot-v1", render_mode="human")
+    env = gym.make("MountainCar-v0", render_mode="human")
     state, _ = env.reset()
 
     agent = ort.InferenceSession(f"./data/{CHECKPOINT}.onnx")
