@@ -1,4 +1,5 @@
 import gymnasium as gym
+import numpy as np
 import torch
 from safetensors.torch import load_file
 
@@ -35,6 +36,13 @@ def get_action_a2c(agent, state, device="cpu"):
     probs = agent(state)
     action = torch.argmax(probs)
 
+    return int(action.item())
+
+
+def run_inference(sess, state):
+    obs = np.array([state], dtype=np.float32)
+    outputs = sess.run(None, {"obs": obs})
+    action = np.argmax(outputs[0])
     return int(action.item())
 
 
