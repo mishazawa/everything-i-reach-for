@@ -40,7 +40,7 @@ def get_action_a2c(agent, state, device="cpu"):
 
 
 def run_inference(sess, state):
-    obs = np.array([state], dtype=np.float32)
+    obs = np.array(state, dtype=np.float32)
     outputs = sess.run(None, {"obs": obs})
     action = np.argmax(outputs[0])
     return int(action.item())

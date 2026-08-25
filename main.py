@@ -2,12 +2,14 @@ import gymnasium as gym
 import numpy as np
 import onnxruntime as ort
 
+from src.inference.cart_pole import run_inference
+
 CHECKPOINT = "latest"
 
 
 def main():
     print("Hello from everything-i-reach-for!")
-    env = gym.make("Pendulum-v1", render_mode="human")
+    env = gym.make("MountainCar-v0", render_mode="human")
     state, _ = env.reset()
 
     agent = ort.InferenceSession(f"./data/{CHECKPOINT}.onnx")
@@ -16,8 +18,9 @@ def main():
     total_reward = 0
     while not done:
         obs = np.array([state], dtype=np.float32)
-        outputs = agent.run(None, {"obs": obs})
-        state, reward, terminated, truncated, _ = env.step(outputs[0][0])  # pyright: ignore[reportIndexIssue]
+        print(obs)
+        outputs = run_inference(agent, obs)
+        state, reward, terminated, truncated, _ = env.step(outputs)  # pyright: ignore[reportIndexIssue]
         done = terminated or truncated
         total_reward += reward
 
