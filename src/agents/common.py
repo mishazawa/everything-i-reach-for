@@ -1,9 +1,9 @@
 import torch
 
 
-def calc_advantage(rewards, critiques, gamma=0.95):
+def calc_advantage(rewards, critiques, initial_g=0, gamma=0.95):
     ret = []
-    G = 0
+    G = initial_g
     for r in reversed(rewards):
         G = r + gamma * G
         ret.insert(0, G)
