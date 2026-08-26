@@ -20,3 +20,5 @@ wheels/
 .serena/
 logs/
 hou/
+
+.DS_Store

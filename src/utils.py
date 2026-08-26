@@ -161,4 +161,6 @@ def run_tests(agent: PPOCartAgent, env: gym.Env, writer: SummaryWriter, num_test
         writer.add_scalar("eval/reward", info["episode"]["r"], e + 1)
 
     data = list(env.return_queue)
-    return np.average(data), np.min(data), np.max(data)
+    win_rate = np.mean(np.array(data) > 0)
+    average_reward = np.mean(data)
+    return average_reward, np.min(data), np.max(data), win_rate
