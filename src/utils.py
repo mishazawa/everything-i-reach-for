@@ -1,9 +1,9 @@
+import os
 from dataclasses import dataclass
 
 import gymnasium as gym
 import numpy as np
 import torch
-from safetensors.torch import save_file
 from torch.utils.tensorboard import SummaryWriter
 
 from src.agents.cart_ppo import PPOCartAgent
@@ -85,10 +85,6 @@ def linear_decay(start_epsilon, final_epsilon, epsilon_decay):
     return calc
 
 
-def save_checkpoint(network, name):
-    save_file(network.state_dict(), f"./data/{name}.safetensors")
-
-
 def train_ppo(agent: PPOCartAgent, env: gym.Env, writer: SummaryWriter, hp: HP):
     for e in range(hp.num_episodes):
         state, _ = env.reset()
@@ -164,3 +160,65 @@ def run_tests(agent: PPOCartAgent, env: gym.Env, writer: SummaryWriter, num_test
     win_rate = np.mean(np.array(data) > 0)
     average_reward = np.mean(data)
     return average_reward, np.min(data), np.max(data), win_rate
+
+
+def save_checkpoint(
+    state_dict: dict,
+    epoch: int,
+    reward: float,
+    checkpoint_dir: str = "./data/checkpoints",
+    ttl_epochs: int = 100,
+    best_reward_tracker: list | None = None,
+) -> bool:
+    """
+    Saves a model checkpoint based on TTL (epoch frequency) or best reward performance.
+
+    Args:
+        state_dict (dict): Dictionary containing model/optimizer states and metadata.
+        epoch (int): Current training epoch.
+        reward (float): Metric/reward achieved in the current epoch.
+        checkpoint_dir (str): Directory where checkpoints will be saved.
+        ttl_epochs (int): Save frequency interval (e.g., save every N epochs).
+        best_reward_tracker (list): Single-element list used as a mutable container
+                                    to track the highest reward across function calls.
+
+    Returns:
+        bool: True if a checkpoint was saved, False otherwise.
+    """
+    if best_reward_tracker is None:
+        best_reward_tracker = [-float("inf")]
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    saved = False
+
+    # Check conditions
+    is_ttl_match = (epoch % ttl_epochs == 0) and (epoch > 0)
+    is_best_reward = reward > best_reward_tracker[0]
+
+    # 1. Save Best Reward Checkpoint
+    if is_best_reward:
+        best_reward_tracker[0] = reward
+        best_path = os.path.join(checkpoint_dir, "best_checkpoint.pt")
+
+        save_payload = {
+            **state_dict,
+            "epoch": epoch,
+            "reward": reward,
+        }
+        torch.save(save_payload, best_path)
+        print(f"[Checkpoint] New best reward achieved ({reward:.4f}). Saved to {best_path}")
+        saved = True
+
+    # 2. Save Interval (TTL) Checkpoint
+    if is_ttl_match:
+        ttl_path = os.path.join(checkpoint_dir, f"checkpoint_epoch_{epoch}.pt")
+
+        save_payload = {
+            **state_dict,
+            "epoch": epoch,
+            "reward": reward,
+        }
+        torch.save(save_payload, ttl_path)
+        print(f"[Checkpoint] TTL interval reached (Epoch {epoch}). Saved to {ttl_path}")
+        saved = True
+
+    return saved

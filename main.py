@@ -4,10 +4,21 @@ import onnxruntime as ort
 
 CHECKPOINT = "latest"
 
+# ENV_NAME = "MountainCarContinuous-v0"
+ENV_NAME = "LunarLander-v3"
+
 
 def main():
     print("Hello from everything-i-reach-for!")
-    env = gym.make("MountainCarContinuous-v0", render_mode="human")
+    env = gym.make(
+        ENV_NAME,
+        continuous=True,
+        gravity=-10.0,
+        enable_wind=False,
+        wind_power=15.0,
+        turbulence_power=1.5,
+        render_mode="human",
+    )
     state, _ = env.reset()
 
     agent = ort.InferenceSession(f"./data/{CHECKPOINT}.onnx")
