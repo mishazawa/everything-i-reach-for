@@ -152,13 +152,6 @@ def rollout_trajectory(
 
         next_state_np, reward, terminated, truncated, info = envs.step(action.numpy())
 
-        if "final_observation" in info:
-            mask = info["_final_observation"]
-            for i in range(num_envs):
-                if mask[i]:
-                    print("111111")
-                    next_state_np[i] = info["final_observation"][i]
-
         next_state = torch.tensor(next_state_np, dtype=torch.float32)
         bonus = reward_bonus_fn(state, next_state)
 
