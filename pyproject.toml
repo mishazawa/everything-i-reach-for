@@ -18,7 +18,9 @@ dependencies = [
     "stable-baselines3>=2.9.0",
     "swig>=4.5.0",
     "tensorboard>=2.21.0",
+    "tianshou>=2.0.1",
     "torch>=2.13.0",
+    "torchvision>=0.28.0",
     "tqdm>=4.70.0",
 ]
 
