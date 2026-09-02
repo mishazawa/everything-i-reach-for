@@ -2,11 +2,11 @@ import gymnasium as gym
 import numpy as np
 import onnxruntime as ort
 
-ENV_NAME = "LunarLander-v3"
+ENV_NAME = "BipedalWalker-v3"
 
 
 def main():
-    env = gym.make(ENV_NAME, continuous=True, render_mode="human")
+    env = gym.make(ENV_NAME, hardcore=False, render_mode="human")
     state, _ = env.reset()
 
     agent = ort.InferenceSession("./data/latest.onnx")
