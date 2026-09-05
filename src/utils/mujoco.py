@@ -28,10 +28,10 @@ log = logging.getLogger(__name__)
 
 def make_mujoco_env(
     task: str,
-    seed: int,
     num_training_envs: int,
     num_test_envs: int,
     obs_norm: bool,
+    seed: int | None = None,
 ) -> tuple[Env, BaseVectorEnv, BaseVectorEnv]:
     """Wrapper function for Mujoco env.
 
