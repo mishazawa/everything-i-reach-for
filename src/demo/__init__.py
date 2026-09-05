@@ -1,12 +1,12 @@
 import numpy as np
 import onnxruntime as ort
 
-from src.misc.mujoco_env import make_mujoco_env_watch
+from utils import make_mujoco_env_watch
 
 ENV_NAME = "Ant-v5"
 
 
-def main():
+def main() -> None:
     env = make_mujoco_env_watch(ENV_NAME)
     state, _ = env.reset()
 
@@ -28,7 +28,3 @@ def main():
 
     print(f"Episode reward: {total_reward}")
     env.close()
-
-
-if __name__ == "__main__":
-    main()
