@@ -1,12 +1,13 @@
-import gymnasium as gym
 import numpy as np
 import onnxruntime as ort
 
-ENV_NAME = "BipedalWalker-v3"
+from src.misc.mujoco_env import make_mujoco_env_watch
+
+ENV_NAME = "Ant-v5"
 
 
 def main():
-    env = gym.make(ENV_NAME, hardcore=False, render_mode="human")
+    env = make_mujoco_env_watch(ENV_NAME)
     state, _ = env.reset()
 
     agent = ort.InferenceSession("./data/latest.onnx")
@@ -14,6 +15,7 @@ def main():
         print(i.name, i.shape, i.type)
     for o in agent.get_outputs():
         print(o.name, o.shape, o.type)
+
     done = False
     total_reward = 0.0
     while not done:
